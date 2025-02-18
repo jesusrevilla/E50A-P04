@@ -5,11 +5,11 @@ CREATE TABLE clientes (
   email VARCHAR(100) NOT NULL UNIQUE
 );
 
--- create table facturas (id, client_id)
+-- create table facturas (id, cliente_id)
 CREATE TABLE facturas (
   id SERIAL PRIMARY KEY,
-  client_id INTEGER,
-  FOREIGN KEY (client_id) REFERENCES clientes(id)
+  cliente_id INTEGER,
+  FOREIGN KEY (cliente_id) REFERENCES clientes(id)
 );
 
 -- create table productos (id, nombre, precio)
