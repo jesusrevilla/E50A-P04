@@ -3,7 +3,6 @@
 CREATE TABLE clientes (
   id SERIAL PRIMARY KEY,
   email VARCHAR(50) UNIQUE NOT NULL
-
 );
 
 -- create table facturas (id, client_id)
@@ -20,7 +19,6 @@ CREATE TABLE productos (
   id  SERIAL PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL, 
   precio NUMERIC CHECK (precio > 0)
-
 );
 
 -- create table envios (id, fecha, estado)
