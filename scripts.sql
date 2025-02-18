@@ -28,5 +28,5 @@ CREATE TABLE productos (
 CREATE TABLE envios (
   id SERIAL PRIMARY KEY,
   fecha DATE,
-  estado VARCHAR(10) CHECK (estado IN  ('preparando', 'en tránsito', 'entregado')) 
+  estado VARCHAR(20) CHECK (estado IN  ('preparando', 'en tránsito', 'entregado')) 
 );
