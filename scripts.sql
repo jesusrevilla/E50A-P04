@@ -10,8 +10,8 @@ CREATE TABLE clientes (
 
 CREATE TABLE facturas(
   id SERIAL PRIMARY KEY,
-  client_id SERIAL,
-  FOREIGN KEY (client_id) REFERENCES clientes(id)
+  cliente_id SERIAL,
+  FOREIGN KEY (cliente_id) REFERENCES clientes(id)
 );
 
 -- create table productos (id, nombre, precio)
