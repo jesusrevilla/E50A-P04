@@ -1,8 +1,8 @@
 name: Daily Pull Request Info
 
 on:
-  schedule:
-    - cron: '0 22 * * *'
+  workflow_dispatch
+
 
 jobs:
   get-pr-info:
@@ -14,17 +14,22 @@ jobs:
 
     - name: Get Open Pull Requests
       id: get-prs
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
       run: |
-        prs=$(gh pr list --state open --json number,headRefName,author,statusCheckRollup --jq '.[] | {number: .number, branch: .headRefName, user: .author.login, status: .statusCheckRollup[].conclusion}')
-        echo "PRS=$prs" >> $GITHUB_ENV
-
-    - name: Display Pull Request Info
-      run: |
+        prs=$(gh pr list --state open --json number,headRefName,author,statusCheckRollup)
+        echo "$prs" > prs.json
+        
         echo "Open Pull Requests:"
-        echo "${{ env.PRS }}"
+        cat prs.json | jq -c '.[]' | while read pr; do
+          number=$(echo "$pr" | jq -r '.number')
+          branch=$(echo "$pr" | jq -r '.headRefName')
+          user=$(echo "$pr" | jq -r '.author.login')
+          status=$(echo "$pr" | jq -r '.statusCheckRollup[0].conclusion')
+          echo "Pull Request Number: $number"
+          echo "Branch: $branch"
+          echo "User: $user"
+          echo "Status: $status"
+          echo "-------------------------"
+        done
 
-    - name: Record Execution Time
-      run: echo "Execution Time: $(date)" >> $GITHUB_ENV
-
-    - name: Display Execution Time
-      run: echo "Execution Time: ${{ env.Execution_Time }}"

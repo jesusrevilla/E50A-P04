@@ -1,8 +1,6 @@
 name: Pruebas unitarias y funcionales
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
@@ -39,31 +37,13 @@ jobs:
           PGPASSWORD: postgres
 
       - name: Run tests
-        run: |
-          set -o pipefail
-          psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt
-          cat test_output.txt          
+        run: |     
+          psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt        
         env:
           PGPASSWORD: postgres
 
       - name: Notify status
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_REF: ${{ github.ref }}
-          GITHUB_SHA: ${{ github.sha }}
-          ERROR_LINES: ${{ env.ERROR_LINES }}
         run: |
-          COMMENT=$(printf "Branch: %s\nUsuario: %s\nCommit: %s\n Algún error: \n%s" "$GITHUB_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
-
-          echo $COMMENT
-
-          curl -X POST -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/issues/1/comments \
-          -d "$(jq -nc --arg body "$COMMENT" '{"body": $body}')"
-
           if grep -q "ERROR:" test_output.txt; then
             exit 1
           fi          
