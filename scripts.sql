@@ -1,10 +1,14 @@
--- create table clientes (id, email)
 CREATE TABLE clientes (
   id SERIAL PRIMARY KEY,
-  email VARCHAR(25) NOT NULL
+  email VARCHAR(25) UNIQUE NOT NULL
 );
 
 -- create table facturas (id, client_id)
+
+
+
+
+
 CREATE TABLE facturas (
   id SERIAL PRIMARY KEY,
   cliente_id INT,
@@ -12,6 +16,11 @@ CREATE TABLE facturas (
 );
 
 -- create table productos (id, nombre, precio)
+
+
+
+
+
 CREATE TABLE productos  (
   id SERIAL PRIMARY KEY,
   nombre VARCHAR(25) NOT NULL,
@@ -24,6 +33,7 @@ CREATE TABLE envios (
   fecha DATE,
   estado VARCHAR(25) CHECK (estado IN('preparando', 'en tránsito', 'entregado'))
 );
+
 
 SELECT * FROM clientes;
 SELECT * FROM facturas;
