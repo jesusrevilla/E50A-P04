@@ -38,24 +38,11 @@ jobs:
 
       - name: Run tests
         run: |
-          set -o pipefail
-          psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt
-          ERROR_LINES=$(grep -E "ERROR:" test_output.txt | cut -d':' -f1-3)
-          echo "ERROR_LINES<<EOF" >> $GITHUB_ENV
-          echo "$ERROR_LINES" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV          
+          psql -h localhost -U postgres -d testdb -f tests.sql 2>&1 | tee test_output.txt        
         env:
           PGPASSWORD: postgres
 
       - name: Notify status
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_HEAD_REF: ${{ github.event.pull_request.head.ref }}
-          GITHUB_SHA: ${{ github.sha }}
-          ERROR_LINES: ${{ env.ERROR_LINES }}
         run: |
           if grep -q "ERROR:" test_output.txt; then
             exit 1
