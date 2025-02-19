@@ -1,4 +1,4 @@
-\echo 'Sebastian Heredia Pardo - 175680\n\n'
+\echo 'Sebastian Heredia Pardo - 175680\n\n\n'
 -- create table clientes (id, email)
 CREATE TABLE clientes (
   id SERIAL PRIMARY KEY,
