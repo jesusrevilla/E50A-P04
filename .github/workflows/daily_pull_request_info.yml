@@ -3,6 +3,7 @@ name: Daily Pull Request Info
 on:
   workflow_dispatch
 
+
 jobs:
   get-pr-info:
     runs-on: ubuntu-latest
@@ -10,7 +11,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
 
     - name: Get Open Pull Requests
       id: get-prs
@@ -32,3 +32,4 @@ jobs:
           echo "Status: $status"
           echo "-------------------------"
         done
+
