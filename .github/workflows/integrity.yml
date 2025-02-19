@@ -1,8 +1,6 @@
 name: Pruebas unitarias y funcionales
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
@@ -59,14 +57,6 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           ERROR_LINES: ${{ env.ERROR_LINES }}
         run: |
-          COMMENT=$(printf "Branch: %s\nUsuario: %s\nCommit: %s\n Algún error: \n%s" "$GITHUB_HEAD_REF" "$GITHUB_ACTOR" "$GITHUB_SHA" "$ERROR_LINES")
-
-          echo $COMMENT
-
-          curl -X POST -H "Authorization: token $GH_TOKEN" -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/issues/1/comments \
-          -d "$(jq -nc --arg body "$COMMENT" '{"body": $body}')"
-
           if grep -q "ERROR:" test_output.txt; then
             exit 1
           fi          
